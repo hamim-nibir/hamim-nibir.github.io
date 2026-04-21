@@ -24,17 +24,18 @@ const navLinks = [
   { label: "Home",     href: "#home",     icon: <AiOutlineHome size={18}/> },
   { label: "About",     href: "#about",     icon: <AiOutlineUser size={18}/> },
   { label: "Projects", href: "#projects", icon: <BsGrid size={16}/> },
+  { label: "Resume",    href: "#resume",    icon: <BsPencilSquare size={16}/> },
   { label: "Blogs",    href: "#blogs",    icon: <BsPencilSquare size={16}/> },
   { label: "Gallery",  href: "#gallery",  icon: <BsImages size={16}/> },
   { label: "Contact",  href: "#contact",  icon: <AiOutlineMail size={18}/> },
 ];
 
 const socialLinks = [
-  { label: "LinkedIn", href: "https://linkedin.com/in/yourusername", icon: <FaLinkedinIn size={15}/> },
-  { label: "GitHub",   href: "https://github.com/yourusername",      icon: <FaGithub size={15}/> },
-  { label: "Email",    href: "mailto:your@gmail.com",                icon: <MdOutlineEmail size={17}/> },
-  { label: "YouTube",  href: "https://youtube.com/@yourusername",    icon: <FaYoutube size={15}/> },
-  { label: "X",        href: "https://x.com/yourusername",           icon: <FaXTwitter size={14}/> },
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/hamim-nibir/", icon: <FaLinkedinIn size={15}/> },
+  { label: "GitHub",   href: "https://github.com/hamim-nibir",      icon: <FaGithub size={15}/> },
+  { label: "Email",    href: "mailto:nibir0079@gmail.com",                icon: <MdOutlineEmail size={17}/> },
+  { label: "YouTube",  href: "https://youtube.com/@NoorEHamimNibir",    icon: <FaYoutube size={15}/> },
+  { label: "X",        href: "https://x.com/hamim_nibir01",           icon: <FaXTwitter size={14}/> },
 ];
 
 const themeOptions = [
