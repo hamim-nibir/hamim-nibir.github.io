@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "../context/ThemeContext";
 import { useWindowSize } from "../hooks/useWindowSize";
@@ -21,21 +21,21 @@ import {
 import { MdOutlineEmail } from "react-icons/md";
 
 const navLinks = [
-  { label: "Home",     href: "#home",     icon: <AiOutlineHome size={18}/> },
-  { label: "About",     href: "#about",     icon: <AiOutlineUser size={18}/> },
-  { label: "Projects", href: "#projects", icon: <BsGrid size={16}/> },
-  { label: "Resume",    href: "#resume",    icon: <BsPencilSquare size={16}/> },
-  { label: "Blogs",    href: "#blogs",    icon: <BsPencilSquare size={16}/> },
-  { label: "Gallery",  href: "#gallery",  icon: <BsImages size={16}/> },
-  { label: "Contact",  href: "#contact",  icon: <AiOutlineMail size={18}/> },
+  { label: "Home",     href: "#home",     id: "home",     icon: <AiOutlineHome size={18}/> },
+  { label: "About",    href: "#about",    id: "about",    icon: <AiOutlineUser size={18}/> },
+  { label: "Projects", href: "#projects", id: "projects", icon: <BsGrid size={16}/> },
+  { label: "Resume",   href: "#resume",   id: "resume",   icon: <BsPencilSquare size={16}/> },
+  // { label: "Blogs",    href: "#blogs",    id: "blogs",    icon: <BsPencilSquare size={16}/> },
+  { label: "Gallery",  href: "#gallery",  id: "gallery",  icon: <BsImages size={16}/> },
+  { label: "Contact",  href: "#contact",  id: "contact",  icon: <AiOutlineMail size={18}/> },
 ];
 
 const socialLinks = [
   { label: "LinkedIn", href: "https://www.linkedin.com/in/hamim-nibir/", icon: <FaLinkedinIn size={15}/> },
-  { label: "GitHub",   href: "https://github.com/hamim-nibir",      icon: <FaGithub size={15}/> },
-  { label: "Email",    href: "mailto:nibir0079@gmail.com",                icon: <MdOutlineEmail size={17}/> },
-  { label: "YouTube",  href: "https://youtube.com/@NoorEHamimNibir",    icon: <FaYoutube size={15}/> },
-  { label: "X",        href: "https://x.com/hamim_nibir01",           icon: <FaXTwitter size={14}/> },
+  { label: "GitHub",   href: "https://github.com/hamim-nibir",           icon: <FaGithub size={15}/> },
+  { label: "Email",    href: "mailto:nibir0079@gmail.com",               icon: <MdOutlineEmail size={17}/> },
+  { label: "YouTube",  href: "https://youtube.com/@NoorEHamimNibir",     icon: <FaYoutube size={15}/> },
+  { label: "X",        href: "https://x.com/hamim_nibir01",              icon: <FaXTwitter size={14}/> },
 ];
 
 const themeOptions = [
@@ -51,7 +51,41 @@ export default function Navbar() {
   const { isMobile } = useWindowSize();
   const [themeOpen, setThemeOpen] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [activeLink, setActiveLink] = useState("#home");
+
+  // Active section — driven by Intersection Observer
+  const [activeSection, setActiveSection] = useState("home");
+
+  // Scroll to top on page reload
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  // Intersection Observer — watches all sections and updates activeSection
+  useEffect(() => {
+    const sectionIds = navLinks.map((l) => l.id);
+
+    const observers = sectionIds.map((id) => {
+      const el = document.getElementById(id);
+      if (!el) return null;
+
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            setActiveSection(id);
+          }
+        },
+        {
+          threshold: 0.35, // section must be 35% visible to become active
+          rootMargin: "0px 0px -10% 0px",
+        }
+      );
+
+      observer.observe(el);
+      return observer;
+    });
+
+    return () => observers.forEach((obs) => obs && obs.disconnect());
+  }, []);
 
   const SidebarContent = () => (
     <div style={{
@@ -66,7 +100,7 @@ export default function Navbar() {
       {/* Logo + Name */}
       <motion.a
         href="#home"
-        onClick={() => { setActiveLink("#home"); setDrawerOpen(false); }}
+        onClick={() => setDrawerOpen(false)}
         whileHover="hover"
         style={{
           display: "flex",
@@ -78,7 +112,6 @@ export default function Navbar() {
           borderBottom: "1px solid var(--border)",
         }}
       >
-        {/* Logo circle */}
         <motion.div
           variants={{ hover: { scale: 1.06 } }}
           transition={{ duration: 0.3 }}
@@ -102,7 +135,6 @@ export default function Navbar() {
           </svg>
         </motion.div>
 
-        {/* Name */}
         <motion.span
           variants={{ hover: { color: "var(--accent)", letterSpacing: "0.16em" } }}
           transition={{ duration: 0.25 }}
@@ -175,12 +207,12 @@ export default function Navbar() {
       {/* Nav links */}
       <nav style={{ display: "flex", flexDirection: "column", gap: "4px", flex: 1 }}>
         {navLinks.map((link, i) => {
-          const isActive = activeLink === link.href;
+          const isActive = activeSection === link.id;
           return (
             <motion.a
               key={link.label}
               href={link.href}
-              onClick={() => { setActiveLink(link.href); setDrawerOpen(false); }}
+              onClick={() => setDrawerOpen(false)}
               initial={{ opacity: 0, x: -16 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: i * 0.07, duration: 0.3 }}
@@ -197,7 +229,7 @@ export default function Navbar() {
                 letterSpacing: "0.04em",
                 color: isActive ? "var(--accent)" : "var(--text-muted)",
                 background: isActive ? "var(--accent-soft)" : "transparent",
-                border: `1px solid ${isActive ? "var(--accent)" : "transparent"}`,
+                border: "1px solid " + (isActive ? "var(--accent)" : "transparent"),
                 transition: "all 0.2s ease",
                 position: "relative",
                 overflow: "hidden",
@@ -217,7 +249,6 @@ export default function Navbar() {
                 }
               }}
             >
-              {/* Active left bar */}
               {isActive && (
                 <motion.div
                   layoutId="activeBar"
@@ -237,7 +268,7 @@ export default function Navbar() {
         })}
       </nav>
 
-      {/* Theme switcher button */}
+      {/* Theme switcher */}
       <div style={{ marginTop: "1.5rem", position: "relative" }}>
         <motion.button
           onClick={() => setThemeOpen(p => !p)}
@@ -261,7 +292,6 @@ export default function Navbar() {
             transition: "all 0.2s ease",
           }}
         >
-          {/* Palette icon */}
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <circle cx="13.5" cy="6.5" r="1.5" fill="var(--accent)" stroke="none"/>
             <circle cx="17.5" cy="10.5" r="1.5" fill="var(--accent)" stroke="none"/>
@@ -272,7 +302,6 @@ export default function Navbar() {
           Change Theme
         </motion.button>
 
-        {/* Theme popup — opens upward */}
         <AnimatePresence>
           {themeOpen && (
             <motion.div
@@ -318,10 +347,10 @@ export default function Navbar() {
                   >
                     <div style={{
                       width: "26px", height: "26px", borderRadius: "50%",
-                      background: t.bg, border: `2px solid ${t.color}`,
+                      background: t.bg, border: "2px solid " + t.color,
                       display: "flex", alignItems: "center", justifyContent: "center",
                       flexShrink: 0,
-                      boxShadow: themeKey === t.key ? `0 0 8px ${t.color}80` : "none",
+                      boxShadow: themeKey === t.key ? "0 0 8px " + t.color + "80" : "none",
                     }}>
                       <div style={{ width: "9px", height: "9px", borderRadius: "50%", background: t.color }}/>
                     </div>
@@ -346,7 +375,7 @@ export default function Navbar() {
     </div>
   );
 
-  // ─── DESKTOP SIDEBAR ───────────────────────────────
+  // DESKTOP SIDEBAR
   if (!isMobile) {
     return (
       <motion.aside
@@ -369,10 +398,9 @@ export default function Navbar() {
     );
   }
 
-  // ─── MOBILE ────────────────────────────────────────
+  // MOBILE
   return (
     <>
-      {/* Mobile top bar */}
       <div style={{
         position: "fixed",
         top: 0, left: 0, right: 0,
@@ -386,7 +414,6 @@ export default function Navbar() {
         justifyContent: "space-between",
         padding: "0 1.25rem",
       }}>
-        {/* Logo */}
         <a href="#home" style={{ display: "flex", alignItems: "center", gap: "8px", textDecoration: "none" }}>
           <svg width="26" height="26" viewBox="0 0 28 28" fill="none">
             <polygon points="14,2 26,24 2,24" fill="var(--accent)" opacity="0.9"/>
@@ -400,7 +427,6 @@ export default function Navbar() {
           }}>Nibir</span>
         </a>
 
-        {/* Hamburger */}
         <motion.button
           onClick={() => setDrawerOpen(p => !p)}
           whileTap={{ scale: 0.9 }}
@@ -425,7 +451,6 @@ export default function Navbar() {
         </motion.button>
       </div>
 
-      {/* Mobile drawer */}
       <AnimatePresence>
         {drawerOpen && (
           <>

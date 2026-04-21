@@ -29,20 +29,20 @@ export default function About() {
         padding: isMobile ? "5rem 1.5rem 2rem" : "0 4rem",
       }}
     >
-
       {/* Main content */}
-      <div style={{
-        position: "relative",
-        zIndex: 2,
-        display: "flex",
-        flexDirection: isMobile ? "column" : "row",
-        alignItems: "flex-start",
-        gap: isMobile ? "2.5rem" : "5rem",
-        width: "100%",
-        maxWidth: "1100px",
-        margin: "0 auto",
-      }}>
-
+      <div
+        style={{
+          position: "relative",
+          zIndex: 2,
+          display: "flex",
+          flexDirection: isMobile ? "column" : "row",
+          alignItems: "flex-start",
+          gap: isMobile ? "2.5rem" : "5rem",
+          width: "100%",
+          maxWidth: "1100px",
+          margin: "0 auto",
+        }}
+      >
         {/* ── Left: Photo ── */}
         <motion.div
           initial={{ opacity: 0, x: -40 }}
@@ -60,7 +60,8 @@ export default function About() {
               objectFit: "cover",
               borderRadius: "16px",
               border: "2px solid var(--accent)",
-              boxShadow: "0 0 40px var(--accent-soft), 0 0 80px var(--accent-soft)",
+              boxShadow:
+                "0 0 40px var(--accent-soft), 0 0 80px var(--accent-soft)",
               display: "block",
             }}
           />
@@ -68,8 +69,6 @@ export default function About() {
 
         {/* ── Right: Text ── */}
         <div style={{ flex: 1 }}>
-
-          {/* Heading */}
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -81,9 +80,23 @@ export default function About() {
               fontWeight: 800,
               color: "var(--accent)",
               marginBottom: "0.5rem",
+              display: "flex",
+              flexWrap: "wrap",
+              gap: "0px",
             }}
           >
-            About Me
+            {"About Me".split("").map((char, i) => (
+              <motion.span
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.1 + i * 0.05, duration: 0.3 }}
+                style={{ display: "inline-block" }}
+              >
+                {char === " " ? "\u00A0" : char}
+              </motion.span>
+            ))}
           </motion.h2>
 
           {/* Underline */}
@@ -122,11 +135,18 @@ export default function About() {
             </span>{" "}
             and I enjoy building scalable web applications and clean user
             experiences. I specialize in{" "}
-            <span style={{ color: "var(--accent)", fontWeight: 500 }}>React</span>,{" "}
-            <span style={{ color: "var(--accent)", fontWeight: 500 }}>Node.js</span>, and{" "}
+            <span style={{ color: "var(--accent)", fontWeight: 500 }}>
+              React
+            </span>
+            ,{" "}
+            <span style={{ color: "var(--accent)", fontWeight: 500 }}>
+              Node.js
+            </span>
+            , and{" "}
             <span style={{ color: "var(--accent)", fontWeight: 500 }}>
               modern web technologies
-            </span>.
+            </span>
+            .
           </motion.p>
 
           <motion.p
@@ -142,7 +162,11 @@ export default function About() {
               maxWidth: "560px",
             }}
           >
-            I am a passionate developer with a strong interest in building modern web applications using technologies like React and TypeScript. I enjoy turning ideas into functional, user-friendly interfaces and continuously improving my skills through hands-on learning and experimentation.
+            I am a passionate developer with a strong interest in building
+            modern web applications using technologies like React and
+            TypeScript. I enjoy turning ideas into functional, user-friendly
+            interfaces and continuously improving my skills through hands-on
+            learning and experimentation.
           </motion.p>
 
           <motion.p
@@ -158,7 +182,12 @@ export default function About() {
               maxWidth: "560px",
             }}
           >
-            As someone who is still early in my journey, I focus on strengthening my fundamentals and exploring different areas of software development, including frontend design, performance optimization, and problem-solving. I am especially interested in learning about emerging technologies and how they can be applied to real-world solutions.
+            As someone who is still early in my journey, I focus on
+            strengthening my fundamentals and exploring different areas of
+            software development, including frontend design, performance
+            optimization, and problem-solving. I am especially interested in
+            learning about emerging technologies and how they can be applied to
+            real-world solutions.
           </motion.p>
 
           <motion.p
@@ -174,7 +203,10 @@ export default function About() {
               maxWidth: "560px",
             }}
           >
-            I am driven by curiosity and a desire to grow as a developer. I actively seek opportunities to learn, build, and collaborate, and I am committed to developing projects that not only showcase my skills but also create meaningful impact.
+            I am driven by curiosity and a desire to grow as a developer. I
+            actively seek opportunities to learn, build, and collaborate, and I
+            am committed to developing projects that not only showcase my skills
+            but also create meaningful impact.
           </motion.p>
 
           {/* CTA Button */}
@@ -206,7 +238,6 @@ export default function About() {
             <BsDownload size={16} />
             View CV
           </motion.a>
-
         </div>
       </div>
     </section>
